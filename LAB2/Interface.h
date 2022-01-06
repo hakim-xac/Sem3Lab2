@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <string>
 #include <list>
 #include <queue>
@@ -43,25 +42,14 @@ namespace LAB2 {
 		Interface(TypeList&& lst) : lst(lst) {}
 
 
-		auto getMaxTableWidth() const {
-			return maxTableWidth;
-		}
-		auto getMaxTableColumns() const {
-			return maxTableColumns;
-		}
-		bool getFlagClearArray() const {
-			return flagClearArray;
-		}
+		auto getMaxTableWidth()		const				{	return maxTableWidth;		}
+		auto getMaxTableColumns()	const				{	return maxTableColumns;		}
+		bool getFlagClearArray()	const				{	return flagClearArray;		}
+		auto getActiveStatus()		const				{	return activeStatus;		}
 
-		void setFlagClearArray(bool flag) {
-			flagClearArray = flag;
-		}
-		auto getActiveStatus() {
-			return activeStatus;
-		}
-		void setActiveStatus(SortingStatus newStatus) {
-			activeStatus = newStatus;
-		}
+		void setFlagClearArray(bool flag)				{	flagClearArray = flag;		}
+		void setActiveStatus(SortingStatus newStatus)	{	activeStatus = newStatus;	}
+
 
 		auto addToStatusBar(const std::string& str, bool isFormated=true)
 		{
@@ -76,6 +64,8 @@ namespace LAB2 {
 			bufferForStatusBar.emplace(delimiter(' '));
 			bufferForStatusBar.emplace(delimiter());
 		}
+
+
 		auto addToStatusBar(const std::string&& str, bool isFormated=true)
 		{
 			if (!isFormated) {
@@ -91,7 +81,7 @@ namespace LAB2 {
 		}
 
 
-		void showHeader()
+		constexpr void showHeader() 
 		{
 			std::string header{ generatingStrings("Лабораторная работа № 2", "Быстрые методы сортировки последовательностей.") };
 			std::string header2{ generatingStrings("Группа ПБ-11", "Хакимов А.C.") };
@@ -106,7 +96,7 @@ namespace LAB2 {
 		}
 
 
-		void showMenu()
+		constexpr void showMenu()
 		{
 			std::string hr{ delimiter() };
 
@@ -146,17 +136,17 @@ namespace LAB2 {
 
 		void showStatusList()
 		{
-			out << generatingStrings("Статус Списка:", flagClearArray ? "ПУСТОЙ" : "ЗАПОЛНЕН");
+			out << generatingStrings("Статус Списка:", getFlagClearArray() ? "ПУСТОЙ" : "ЗАПОЛНЕН");
 			out << delimiter('-');
 			out << generatingStrings("количество элементов списка:", std::to_string(lst.getSizeList()));
 			out << delimiter('-');
-			out << generatingStrings("Статус сортировки списка:", mapActiveStatus.at(activeStatus));
+			out << generatingStrings("Статус сортировки списка:", mapActiveStatus.at(getActiveStatus()));
 			out << delimiter();
 		}
 
 
 
-		const std::string delimiter(char del = '=')
+		const std::string delimiter(char del = '=') const
 		{
 			std::string result(maxTableWidth, del);
 			result.at(0) = '#';	result[result.size() - 2] = '#'; result.back() = '\n';
@@ -164,7 +154,7 @@ namespace LAB2 {
 		}
 
 
-		std::string generatingStrings(const std::string& str, char del = ' ')
+		const std::string generatingStrings(const std::string& str, char del = ' ') const
 		{
 			try {
 				if (str.empty()) throw std::exception("Dont empty string! -> LAB2::MyList::generatingStrings(const std::string& str)");
@@ -183,7 +173,7 @@ namespace LAB2 {
 		}
 
 
-		std::string generatingStrings(const std::string&& str, char del = ' ')
+		const std::string generatingStrings(const std::string&& str, char del = ' ') const
 		{
 			try {
 				if (str.empty()) throw std::exception("Dont empty string! -> LAB2::MyList::generatingStrings(const std::string& str)");
@@ -202,7 +192,7 @@ namespace LAB2 {
 		}
 
 
-		std::string generatingStrings(const std::string& str, const std::string& str2, char del = ' ')
+		const std::string generatingStrings(const std::string& str, const std::string& str2, char del = ' ') const 
 		{
 			try {
 				size_t len{ str.length() + str2.length() + 11 };
@@ -220,7 +210,7 @@ namespace LAB2 {
 		}
 
 
-		std::string generatingStrings(const std::string&& str, const std::string&& str2, char del = ' ')
+		const std::string generatingStrings(const std::string&& str, const std::string&& str2, char del = ' ') const
 		{
 			try {
 				size_t len{ str.length() + str2.length() + 11 };

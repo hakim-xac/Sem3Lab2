@@ -7,8 +7,10 @@ namespace LAB2 {
 	{
 		ListInterface() = delete;
 	public:
-		ListInterface(TypeList& lst)	:	Interface<TypeList>(lst) {}
+
+
 		ListInterface(TypeList&& lst)	:	Interface<TypeList>(lst) {}
+
 
 		void showPrintList()
 		{
@@ -24,6 +26,7 @@ namespace LAB2 {
 				this->addToStatusBar("Список ещё не заполнен!");
 			}
 		}
+
 
 		void printList(const std::string&& defaultString)
 		{
@@ -71,6 +74,7 @@ namespace LAB2 {
 			this->addToStatusBar("Список успешно отсортирован в порядке возрастания!");
 		}
 
+
 		void showDescendingList()
 		{
 			if (this->getFlagClearArray()) {
@@ -81,6 +85,7 @@ namespace LAB2 {
 			this->setActiveStatus(LAB2::SortingStatus::SortedDescending);
 			this->addToStatusBar("Список успешно отсортирован в порядке убывания!");
 		}
+
 
 		void showShuffleList()
 		{

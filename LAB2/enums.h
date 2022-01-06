@@ -14,6 +14,8 @@ namespace LAB2 {
 	enum class SortingStatus {
 		SortedAscending, SortedDescending, ShuffleSorted, RandomSorted, NotStatus
 	};
+
+	enum class TypePredicat { less, greater };
 }
 
 

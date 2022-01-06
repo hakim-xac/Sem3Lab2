@@ -8,19 +8,17 @@
 #include <random>
 #include <ctime>						
 #include <iostream>						
+#include "enums.h"						
 
 namespace LAB2 {
-
-	enum class TypePredicat { less, greater };
 
 	template <typename Type>
 	class MyList
 	{
-	protected:
+	private:
 		std::list<Type> lst;
 
 	public:
-
 
 		MyList() : lst(100) {};
 
@@ -61,8 +59,22 @@ namespace LAB2 {
 			});
 		}
 
-		void directMergeSort(std::list<Type>::iterator begin, std::list<Type>::iterator end, TypePredicat typePredicat = TypePredicat::less)
+
+		void shuffle()
 		{
+			std::vector<Type> tmp(lst.size());
+			std::copy(lst.begin(), lst.end(), tmp.begin());
+			std::shuffle(tmp.begin(), tmp.end(), std::mt19937(std::random_device()()));
+			std::copy(tmp.begin(), tmp.end(), lst.begin());
+		}
+
+
+		void directMergeSort(
+			std::list<Type>::iterator begin
+			, std::list<Type>::iterator end
+			, TypePredicat typePredicat = TypePredicat::less
+			){
+
 			std::function<bool(Type, Type)> predicat;
 			switch (typePredicat) {
 			case TypePredicat::less:
@@ -83,15 +95,6 @@ namespace LAB2 {
 			directMergeSort(middle, end,  typePredicat);
 
 			std::inplace_merge(begin, middle, end, predicat);
-		}
-
-
-		void shuffle()
-		{
-			std::vector<Type> tmp(lst.size());
-			std::copy(lst.begin(), lst.end(), tmp.begin());
-			std::shuffle(tmp.begin(), tmp.end(), std::mt19937(std::random_device()()));
-			std::copy(tmp.begin(), tmp.end(), lst.begin());
 		}
 
 	};
