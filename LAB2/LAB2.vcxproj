@@ -143,11 +143,13 @@
   <ItemGroup>
     <ClCompile Include="Interface.cpp" />
     <ClCompile Include="LAB2.cpp" />
+    <ClCompile Include="ListInterface.cpp" />
     <ClCompile Include="MyList.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="enums.h" />
     <ClInclude Include="Interface.h" />
+    <ClInclude Include="ListInterface.h" />
     <ClInclude Include="MyList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

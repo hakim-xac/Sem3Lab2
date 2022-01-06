@@ -1,6 +1,6 @@
 ﻿#include <iostream>
 #include "MyList.h"                                                  // Подключаем заголовок, где находится реализация методов класса, работы программы
-#include "Interface.h"                                                  // Подключаем заголовок, где находится реализация методов класса, работы программы
+#include "ListInterface.h"                                                  // Подключаем заголовок, где находится реализация методов класса, работы программы
 #include "enums.h"                                                  // Подключаем заголовок, содержащий все перечисления
 
 
@@ -14,7 +14,7 @@ int main()
     setlocale(LC_ALL, "Russian");                   // Задаем локаль
     Keys key{ Keys::Exit };
 
-    Interface<LAB2::MyList<int>> window{ MyList<int>() };
+    ListInterface<LAB2::MyList<int>> window{ MyList<int>() };
 
     /* Запускаем бесконечный цикл ожидая ввод команды от пользователя  */
     do {
@@ -50,7 +50,7 @@ int main()
             window.showClearList();
             break;  
         default:
-            window.addInStatusBar("Введена не верная команда!");   // любая клавиша отсутствующая в перечислении Keys
+            window.addToStatusBar("Введена не верная команда!");   // любая клавиша отсутствующая в перечислении Keys
             break;
         }
     } while (key != Keys::Exit);                    // 0

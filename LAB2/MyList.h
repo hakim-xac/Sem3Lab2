@@ -16,6 +16,7 @@ namespace LAB2 {
 	template <typename Type>
 	class MyList
 	{
+	protected:
 		std::list<Type> lst;
 
 	public:

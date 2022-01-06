@@ -12,11 +12,10 @@ namespace LAB2 {
 	template <typename TypeList>
 	class Interface
 	{
+	private:
 		std::ostream& out			{ std::cout };
 		int maxTableWidth			{ 90 };
 		int maxTableColumns			{ 5 };
-		bool flagClearArray			{ true };
-		SortingStatus activeStatus	{ SortingStatus::NotStatus };
 		std::queue <std::string> bufferForStatusBar	{};
 
 		const std::map <LAB2::SortingStatus, std::string> mapActiveStatus	{
@@ -26,8 +25,17 @@ namespace LAB2 {
 			{ LAB2::SortingStatus::RandomSorted,        "Случайно" },
 			{ LAB2::SortingStatus::NotStatus,           "Не сортирован" } 
 		};
-		TypeList lst;
+
 		Interface() = delete;
+
+	protected:
+
+
+		TypeList lst;
+		bool flagClearArray{ true };
+		SortingStatus activeStatus	{ SortingStatus::NotStatus };
+
+
 	public:
 
 
@@ -35,21 +43,49 @@ namespace LAB2 {
 		Interface(TypeList&& lst) : lst(lst) {}
 
 
-		void addInStatusBar(const std::string& part)
+		auto getMaxTableWidth() const {
+			return maxTableWidth;
+		}
+		auto getMaxTableColumns() const {
+			return maxTableColumns;
+		}
+		bool getFlagClearArray() const {
+			return flagClearArray;
+		}
+
+		void setFlagClearArray(bool flag) {
+			flagClearArray = flag;
+		}
+		auto getActiveStatus() {
+			return activeStatus;
+		}
+		void setActiveStatus(SortingStatus newStatus) {
+			activeStatus = newStatus;
+		}
+
+		auto addToStatusBar(const std::string& str, bool isFormated=true)
 		{
+			if (!isFormated) {
+				bufferForStatusBar.emplace(str);
+				return;
+			}
+
 			bufferForStatusBar.emplace(delimiter());
 			bufferForStatusBar.emplace(delimiter(' '));
-			bufferForStatusBar.emplace(generatingStrings(part));
+			bufferForStatusBar.emplace(generatingStrings(str));
 			bufferForStatusBar.emplace(delimiter(' '));
 			bufferForStatusBar.emplace(delimiter());
 		}
-
-
-		void addInStatusBar(const std::string&& part)
+		auto addToStatusBar(const std::string&& str, bool isFormated=true)
 		{
+			if (!isFormated) {
+				bufferForStatusBar.emplace(str);
+				return;
+			}
+
 			bufferForStatusBar.emplace(delimiter());
 			bufferForStatusBar.emplace(delimiter(' '));
-			bufferForStatusBar.emplace(generatingStrings(part));
+			bufferForStatusBar.emplace(generatingStrings(str));
 			bufferForStatusBar.emplace(delimiter(' '));
 			bufferForStatusBar.emplace(delimiter());
 		}
@@ -119,61 +155,12 @@ namespace LAB2 {
 		}
 
 
-		void showGeneratedRandom()
-		{
-			lst.createRandomList();
-			
-			flagClearArray = false;
-			activeStatus = LAB2::SortingStatus::RandomSorted;
-			addInStatusBar("Список успешно заполнен случайными числами!");
-		}
-
 
 		const std::string delimiter(char del = '=')
 		{
 			std::string result(maxTableWidth, del);
 			result.at(0) = '#';	result[result.size() - 2] = '#'; result.back() = '\n';
 			return result;
-		}
-
-
-		void showPrintList()
-		{
-			if (!flagClearArray) {
-
-				addInStatusBar("Вывод списка");
-
-				int lengthColumn{ (maxTableWidth - 10) / maxTableColumns };
-				printList(std::string(lengthColumn, ' '));
-
-			}
-			else {
-				addInStatusBar("Список ещё не заполнен!");
-			}
-		}
-
-		void printList(const std::string&& defaultString)
-		{
-			std::string result{};
-			for (auto it{ lst.begin() }, ite{ lst.end() }; it != ite; ++it) {
-
-				std::string tmp{ defaultString };
-				std::string num{ std::to_string(*it) };
-
-				size_t len{ static_cast<size_t>(std::distance(lst.begin(), it)) };
-				if ((len + 1) % maxTableColumns != 0) {
-					tmp.replace(tmp.size() - 1, 1, "|");
-				}
-				tmp.replace((tmp.length() - num.length()) / 2, num.length(), num);
-				result += tmp;
-
-				if ((len + 1) % maxTableColumns == 0) {
-					bufferForStatusBar.emplace(generatingStrings(result));
-					bufferForStatusBar.emplace(delimiter('-'));
-					result.clear();
-				}
-			}
-			if (!result.empty()) bufferForStatusBar.emplace(generatingStrings(result));
 		}
 
 
@@ -250,51 +237,7 @@ namespace LAB2 {
 			}
 		}
 
-		void showAscendingList() 
-		{
-			if (flagClearArray) {
-				addInStatusBar("Необходимо заполнить список!");
-				return;
-			}
-			lst.directMergeSort(lst.begin(), lst.end());
-			activeStatus = LAB2::SortingStatus::SortedAscending;
-			addInStatusBar("Список успешно отсортирован в порядке возрастания!");
-		}
 
-		void showDescendingList() 
-		{
-			if (flagClearArray) {
-				addInStatusBar("Необходимо заполнить список!");
-				return;
-			}
-			lst.directMergeSort(lst.begin(), lst.end(), TypePredicat::greater);
-			activeStatus = LAB2::SortingStatus::SortedDescending;
-			addInStatusBar("Список успешно отсортирован в порядке убывания!");
-		}
-
-		void showShuffleList() 
-		{
-			if (flagClearArray) {
-				addInStatusBar("Необходимо заполнить список!");
-				return;
-			}
-			lst.shuffle();
-			activeStatus = LAB2::SortingStatus::ShuffleSorted;
-			addInStatusBar("Список успешно перемешан!");
-		}
-
-
-		void showClearList()
-		{
-			if (flagClearArray) {
-				addInStatusBar("Очищать нечего, список ещё пуст!");
-				return;
-			}
-			lst.clear();
-			flagClearArray = true;
-			activeStatus = LAB2::SortingStatus::NotStatus;
-			addInStatusBar("Список успешно очищен!");
-		}
 	};
 }
 
