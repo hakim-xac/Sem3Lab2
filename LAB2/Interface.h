@@ -174,7 +174,7 @@ namespace LAB2 {
 
 
 		const std::string generatingStrings(const std::string&& str, char del = ' ') const
-		{
+		{			
 			try {
 				if (str.empty()) throw std::exception("Dont empty string! -> LAB2::MyList::generatingStrings(const std::string& str)");
 				int parity{ str.length() % 2 == 0 };

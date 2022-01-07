@@ -110,6 +110,16 @@ namespace LAB2 {
 			this->setActiveStatus(LAB2::SortingStatus::NotStatus);
 			this->addToStatusBar("Список успешно очищен!");
 		}
+
+
+		void showResizeList()
+		{
+			auto newSize{ this->lst.getSizeList() + 100};
+			if (newSize > 500) newSize = 100;
+			this->lst.resize(newSize);
+			showClearList();
+			this->addToStatusBar("Список успешно Изменен!");
+		}
 	};
 }
 

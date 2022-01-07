@@ -48,9 +48,13 @@ int main()
             break;
         case Keys::ClearList:
             window.showClearList();
+            break;
+        case Keys::ResizeList:
+            window.showResizeList();
             break;  
         default:
             window.addToStatusBar("Введена не верная команда!");   // любая клавиша отсутствующая в перечислении Keys
+            window.addToStatusBar(std::to_string(static_cast<int>(key)));
             break;
         }
     } while (key != Keys::Exit);                    // 0

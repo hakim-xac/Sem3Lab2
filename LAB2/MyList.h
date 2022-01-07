@@ -33,10 +33,10 @@ namespace LAB2 {
 		auto crend()	{ return lst.crend();	}
 
 
-		auto  getSizeList() const { return lst.size(); }
+		size_t  getSizeList() const { return lst.size(); }
 
 
-		void resize(int newSize)
+		void resize(size_t newSize)
 		{
 			lst.clear();
 			lst.resize(newSize);
