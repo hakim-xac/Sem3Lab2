@@ -117,7 +117,7 @@ namespace LAB2 {
 			auto newSize{ this->lst.getSizeList() + 100};
 			if (newSize > 500) newSize = 100;
 			this->lst.resize(newSize);
-			showClearList();
+			if(!this->getFlagClearArray()) showClearList();
 			this->addToStatusBar("Список успешно Изменен!");
 		}
 	};

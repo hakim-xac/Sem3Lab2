@@ -1,6 +1,7 @@
 #pragma once
 
 #include <list>								
+#include <vector>								
 #include <iterator>		
 #include <functional>		
 #include <algorithm>
@@ -88,13 +89,32 @@ namespace LAB2 {
 
 			if (distance < 2)  return;
 
-			auto middle{ begin };
-			std::advance(middle, distance / 2);
+			auto middle{ std::next(begin, distance / 2) };
 
 			directMergeSort(begin, middle, typePredicat);
 			directMergeSort(middle, end,  typePredicat);
 
-			std::inplace_merge(begin, middle, end, predicat);
+			auto&& array{ mergeSort(begin, middle, end, predicat) };
+
+			std::move(array.cbegin(), array.cend(), begin);
+		}
+
+
+		template <typename Iter, typename Comp>
+		std::vector<typename Iter::value_type> mergeSort(const Iter begin, const Iter middle, const Iter end, Comp predicat)
+		{
+			std::vector<typename Iter::value_type> array;
+			Iter left{ begin }, right{ middle };
+
+			while (left != middle && right != end)
+			{
+				array.push_back((predicat(*left, *right)) ? *left++ : *right++ );
+			}
+
+			array.insert(array.end(), left, middle);
+			array.insert(array.end(), right, end);
+
+			return std::move(array);
 		}
 
 	};
