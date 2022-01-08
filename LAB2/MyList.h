@@ -3,6 +3,7 @@
 #include <list>								
 #include <vector>								
 #include <iterator>		
+#include <numeric>		
 #include <functional>		
 #include <algorithm>
 #include <limits>
@@ -69,13 +70,13 @@ namespace LAB2 {
 			std::copy(tmp.begin(), tmp.end(), lst.begin());
 		}
 
-
-		void directMergeSort(
-			std::list<Type>::iterator begin
-			, std::list<Type>::iterator end
+		template <typename Iter>
+		size_t directMergeSort(
+			Iter begin
+			, Iter end
 			, TypePredicat typePredicat = TypePredicat::less
-			){
-
+		)
+		{
 			std::function<bool(Type, Type)> predicat;
 			switch (typePredicat) {
 			case TypePredicat::less:
@@ -85,36 +86,57 @@ namespace LAB2 {
 				predicat = [](Type lhs, Type rhs) { return lhs > rhs;  };
 				break;
 			}
-			auto distance { std::distance(begin, end) };
 
-			if (distance < 2)  return;
+			auto distance { std::distance(begin, end) };
+			if (distance < 2)  return 0;
 
 			auto middle{ std::next(begin, distance / 2) };
 
-			directMergeSort(begin, middle, typePredicat);
-			directMergeSort(middle, end,  typePredicat);
 
-			auto&& array{ mergeSort(begin, middle, end, predicat) };
+			size_t countsCompareAndMove{};
+			countsCompareAndMove += directMergeSort(begin, middle, typePredicat);
+			countsCompareAndMove += directMergeSort(middle, end,  typePredicat);
+
+			std::vector<typename Iter::value_type> array;
+			size_t counts{};
+			std::tie(array, counts) = mergeSort(begin, middle, end, predicat);
 
 			std::move(array.cbegin(), array.cend(), begin);
+			return countsCompareAndMove + counts;
 		}
 
 
 		template <typename Iter, typename Comp>
-		std::vector<typename Iter::value_type> mergeSort(const Iter begin, const Iter middle, const Iter end, Comp predicat)
+		auto mergeSort(
+			const Iter begin
+			, const Iter middle
+			, const Iter end
+			, Comp predicat
+		) -> std::pair<std::vector<typename Iter::value_type>, size_t>
 		{
 			std::vector<typename Iter::value_type> array;
-			Iter left{ begin }, right{ middle };
 
+			Iter left{ begin }, right{ middle };
+			size_t counts{};
 			while (left != middle && right != end)
 			{
 				array.push_back((predicat(*left, *right)) ? *left++ : *right++ );
+				++counts;
 			}
 
 			array.insert(array.end(), left, middle);
 			array.insert(array.end(), right, end);
 
-			return std::move(array);
+			return { std::move(array), counts };
+		}
+
+
+		template <typename Iter>
+		Type sum(Iter begin, Iter end)
+		{
+			return std::accumulate(begin, end, Type(), [](Type a, Type b) {
+				return a + b;
+				});
 		}
 
 	};

@@ -69,9 +69,20 @@ namespace LAB2 {
 				this->addToStatusBar("Необходимо заполнить список!");
 				return;
 			}
-			this->lst.directMergeSort(this->lst.begin(), this->lst.end());
+
+			auto oldHashSum{ this->lst.sum(this->lst.begin(), this->lst.end()) };
+
+			auto sum{ this->lst.directMergeSort(this->lst.begin(), this->lst.end()) };
+
+			auto newHashSum{ this->lst.sum(this->lst.begin(), this->lst.end()) };
+
 			this->setActiveStatus(LAB2::SortingStatus::SortedAscending);
 			this->addToStatusBar("Список успешно отсортирован в порядке возрастания!");
+			this->addToStatusBar(this->generatingStrings("Контрольная сумма до сортировки:",	std::to_string(oldHashSum)), false);
+			this->addToStatusBar(this->generatingStrings("Контрольная сумма после сортировки:", std::to_string(newHashSum)), false);
+			this->addToStatusBar(this->generatingStrings("Количество сравнений:", std::to_string(sum)), false);
+			this->addToStatusBar(this->generatingStrings("Количество пересылок:", std::to_string(sum)), false);
+
 		}
 
 
@@ -81,9 +92,19 @@ namespace LAB2 {
 				this->addToStatusBar("Необходимо заполнить список!");
 				return;
 			}
-			this->lst.directMergeSort(this->lst.begin(), this->lst.end(), TypePredicat::greater);
+
+			auto oldHashSum{ this->lst.sum(this->lst.begin(), this->lst.end()) };
+
+			auto sum{ this->lst.directMergeSort(this->lst.begin(), this->lst.end(), TypePredicat::greater) };
+
+			auto newHashSum{ this->lst.sum(this->lst.begin(), this->lst.end()) };
+
 			this->setActiveStatus(LAB2::SortingStatus::SortedDescending);
 			this->addToStatusBar("Список успешно отсортирован в порядке убывания!");
+			this->addToStatusBar(this->generatingStrings("Контрольная сумма до сортировки:", std::to_string(oldHashSum)), false);
+			this->addToStatusBar(this->generatingStrings("Контрольная сумма после сортировки:", std::to_string(newHashSum)), false);
+			this->addToStatusBar(this->generatingStrings("Количество сравнений:", std::to_string(sum)), false);
+			this->addToStatusBar(this->generatingStrings("Количество пересылок:", std::to_string(sum)), false);
 		}
 
 
