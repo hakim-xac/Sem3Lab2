@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <list>
 #include <queue>
 #include <map>
 #include "enums.h"
@@ -11,13 +10,20 @@ namespace LAB2 {
 	template <typename TypeList>
 	class Interface
 	{
+	/// <summary>
+	/// Базовый класс интерфейса
+	/// </summary>
+	/// <typeparam name="TypeList">Тип "MyList"</typeparam>
 	private:
-		std::ostream& out			{ std::cout };
-		int maxTableWidth			{ 90 };
-		int maxTableColumns			{ 5 };
-		std::queue <std::string> bufferForStatusBar	{};
+		std::ostream& out			{ std::cout };								// буфер вывода
+		int maxTableWidth			{ 90 };										// ширина выводимой строки
+		int maxTableColumns			{ 5 };										// количество колонов при выводе списка
+		std::queue <std::string> bufferForStatusBar	{};							// очередь для статус бара
 
 		const std::map <LAB2::SortingStatus, std::string> mapActiveStatus	{
+			///
+			/// Преобразует enum class SortingStatus в человекочитабельный вид
+			///
 			{ LAB2::SortingStatus::SortedAscending,     "По возрастанию" },
 			{ LAB2::SortingStatus::SortedDescending,    "По убыванию" },
 			{ LAB2::SortingStatus::ShuffleSorted,       "Перемешан" },
@@ -25,7 +31,7 @@ namespace LAB2 {
 			{ LAB2::SortingStatus::NotStatus,           "Не сортирован" } 
 		};
 
-		Interface() = delete;
+		Interface() = delete;													// запрещаем создавать пустой класс
 
 	protected:
 
@@ -41,18 +47,29 @@ namespace LAB2 {
 		Interface(TypeList& lst) :	lst(lst) {}
 		Interface(TypeList&& lst) : lst(lst) {}
 
-
+		/// <summary>
+		/// Геттеры некоторых полей
+		/// </summary>
 		auto getMaxTableWidth()		const				{	return maxTableWidth;		}
 		auto getMaxTableColumns()	const				{	return maxTableColumns;		}
 		bool getFlagClearArray()	const				{	return flagClearArray;		}
 		auto getActiveStatus()		const				{	return activeStatus;		}
 
+		/// <summary>
+		/// сеттеры некоторых полей
+		/// </summary>
 		void setFlagClearArray(bool flag)				{	flagClearArray = flag;		}
 		void setActiveStatus(SortingStatus newStatus)	{	activeStatus = newStatus;	}
 
 
-		auto addToStatusBar(const std::string& str, bool isFormated=true)
+		void addToStatusBar(const std::string& str, bool isFormated=true)
 		{
+			/// <summary>
+			/// принимает lvalue строку и отправляет её в очередь статус бара
+			/// </summary>
+			/// 
+			/// <param name="isFormated">Форматировать строки по умолчанию?</param>
+			/// 
 			if (!isFormated) {
 				bufferForStatusBar.emplace(str);
 				return;
@@ -68,6 +85,12 @@ namespace LAB2 {
 
 		auto addToStatusBar(const std::string&& str, bool isFormated=true)
 		{
+			/// <summary>
+			/// принимает rvalue строку и отправляет её в очередь статус бара
+			/// </summary>
+			/// 
+			/// <param name="isFormated">Форматировать строки по умолчанию?</param>
+			/// 
 			if (!isFormated) {
 				bufferForStatusBar.emplace(str);
 				return;
@@ -83,6 +106,9 @@ namespace LAB2 {
 
 		constexpr void showHeader() 
 		{
+			/// <summary>
+			/// выводит заголовок
+			/// </summary>
 			std::string header{ generatingStrings("Лабораторная работа № 2", "Быстрые методы сортировки последовательностей.") };
 			std::string header2{ generatingStrings("Группа ПБ-11", "Хакимов А.C.") };
 
@@ -98,6 +124,9 @@ namespace LAB2 {
 
 		constexpr void showMenu()
 		{
+			/// <summary>
+			/// выводит меню
+			/// </summary>
 			std::string hr{ delimiter() };
 
 			out << hr;
@@ -117,25 +146,29 @@ namespace LAB2 {
 
 		void showStatusBar()
 		{
-			if (!bufferForStatusBar.empty()) {
-				std::string hr{ delimiter(' ')};
+			/// <summary>
+			/// выводит статус бар
+			/// </summary>
+			std::string hr{ delimiter(' ')};
 
-				out << hr;
+			out << hr;
 
-				while (!bufferForStatusBar.empty())
-				{
-					out << bufferForStatusBar.front();
-					bufferForStatusBar.pop();
-				}
+			while (!bufferForStatusBar.empty())
+			{
+				out << bufferForStatusBar.front();
+				bufferForStatusBar.pop();
+			}			
 
-				out << hr;
-
-			}
+			out << hr;
+			
 		}
 
 
 		void showStatusList()
 		{
+			/// <summary>
+			/// выводит служебную информацию о списке
+			/// </summary>
 			out << generatingStrings("Статус Списка:", getFlagClearArray() ? "ПУСТОЙ" : "ЗАПОЛНЕН");
 			out << delimiter('-');
 			out << generatingStrings("количество элементов списка:", std::to_string(lst.getSizeList()));
@@ -148,6 +181,11 @@ namespace LAB2 {
 
 		const std::string delimiter(char del = '=') const
 		{
+			/// <summary>
+			/// задает строку разделитель, между информацией при выводе
+			/// </summary>
+			/// <param name="del"> символ разделителя</param>
+			/// <returns></returns>
 			std::string result(maxTableWidth, del);
 			result.at(0) = '#';	result[result.size() - 2] = '#'; result.back() = '\n';
 			return result;
@@ -156,6 +194,12 @@ namespace LAB2 {
 
 		const std::string generatingStrings(const std::string& str, char del = ' ') const
 		{
+			/// <summary>
+			/// генерирует форматируемую строку с текстом str по центру
+			/// принимает lvalue строку
+			/// </summary>
+			/// <param name="del">заполняем "пустоты" этим символом</param>
+			
 			try {
 				if (str.empty()) throw std::exception("Dont empty string! -> LAB2::MyList::generatingStrings(const std::string& str)");
 				int parity{ str.length() % 2 == 0 };
@@ -174,7 +218,12 @@ namespace LAB2 {
 
 
 		const std::string generatingStrings(const std::string&& str, char del = ' ') const
-		{			
+		{
+			/// <summary>
+			/// генерирует форматируемую строку с текстом str по центру
+			/// принимает rvalue строку
+			/// </summary>
+			/// <param name="del">заполняем "пустоты" этим символом</param>
 			try {
 				if (str.empty()) throw std::exception("Dont empty string! -> LAB2::MyList::generatingStrings(const std::string& str)");
 				int parity{ str.length() % 2 == 0 };
@@ -194,6 +243,11 @@ namespace LAB2 {
 
 		const std::string generatingStrings(const std::string& str, const std::string& str2, char del = ' ') const 
 		{
+			/// <summary>
+			/// генерирует форматируемую строку с текстом str слева от края и str2 справа от края
+			/// принимает lvalue строки
+			/// </summary>
+			/// <param name="del">заполняем "пустоты" этим символом</param>
 			try {
 				size_t len{ str.length() + str2.length() + 11 };
 				size_t middleSize{ maxTableWidth > len ? maxTableWidth - len : 11 };
@@ -212,6 +266,11 @@ namespace LAB2 {
 
 		const std::string generatingStrings(const std::string&& str, const std::string&& str2, char del = ' ') const
 		{
+			/// <summary>
+			/// генерирует форматируемую строку с текстом str слева от края и str2 справа от края
+			/// принимает rvalue строки
+			/// </summary>
+			/// <param name="del">заполняем "пустоты" этим символом</param>
 			try {
 				size_t len{ str.length() + str2.length() + 11 };
 				size_t middleSize{ maxTableWidth > len ? maxTableWidth - len : 11 };

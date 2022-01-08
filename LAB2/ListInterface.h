@@ -5,7 +5,11 @@ namespace LAB2 {
 	template <typename TypeList>
 	class ListInterface : public Interface<TypeList>
 	{
-		ListInterface() = delete;
+		/// <summary>
+		/// Производный класс интерфейса
+		/// </summary>
+
+		ListInterface() = delete;	// Запрещаем создавать класс с пустым параметром
 	public:
 
 
@@ -14,6 +18,9 @@ namespace LAB2 {
 
 		void showPrintList()
 		{
+			/// <summary>
+			/// Печатает список если не он не пуст и информирует если пуст
+			/// </summary>
 			if (!this->getFlagClearArray()) {
 
 				this->addToStatusBar("Вывод списка");
@@ -30,6 +37,10 @@ namespace LAB2 {
 
 		void printList(const std::string&& defaultString)
 		{
+			/// <summary>
+			/// Форматирует вывод списка, за основу берет строку из параметра defaultString
+			/// </summary>
+			/// <param name="string">шаблон строки</param>
 			std::string result{};
 			for (auto it{ this->lst.begin() }, ite{ this->lst.end() }; it != ite; ++it) {
 
@@ -55,6 +66,9 @@ namespace LAB2 {
 
 		void showGeneratedRandom()
 		{
+			/// <summary>
+			/// выводит информацию о событии, генерация случайными числами
+			/// </summary>
 			this->lst.createRandomList();
 
 			this->setFlagClearArray(false);
@@ -65,6 +79,9 @@ namespace LAB2 {
 
 		void showAscendingList()
 		{
+			/// <summary>
+			/// выводит информацию о событии, Сортировка по возрастанию
+			/// </summary>
 			if (this->getFlagClearArray()) {
 				this->addToStatusBar("Необходимо заполнить список!");
 				return;
@@ -88,6 +105,9 @@ namespace LAB2 {
 
 		void showDescendingList()
 		{
+			/// <summary>
+			/// выводит информацию о событии, Сортировка по убыванию
+			/// </summary>
 			if (this->getFlagClearArray()) {
 				this->addToStatusBar("Необходимо заполнить список!");
 				return;
@@ -110,6 +130,9 @@ namespace LAB2 {
 
 		void showShuffleList()
 		{
+			/// <summary>
+			/// выводит информацию о событии, перемешивании списка
+			/// </summary>
 			if (this->getFlagClearArray()) {
 				this->addToStatusBar("Необходимо заполнить список!");
 				return;
@@ -122,6 +145,9 @@ namespace LAB2 {
 
 		void showClearList()
 		{
+			/// <summary>
+			/// выводит информацию о событии, очистка списка
+			/// </summary>
 			if (this->getFlagClearArray()) {
 				this->addToStatusBar("Очищать нечего, список ещё пуст!");
 				return;
@@ -135,6 +161,9 @@ namespace LAB2 {
 
 		void showResizeList()
 		{
+			/// <summary>
+			/// выводит информацию о событии, изменение размера
+			/// </summary>
 			auto newSize{ this->lst.getSizeList() + 100};
 			if (newSize > 500) newSize = 100;
 			this->lst.resize(newSize);

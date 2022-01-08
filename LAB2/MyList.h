@@ -22,10 +22,12 @@ namespace LAB2 {
 
 	public:
 
-		MyList() : lst(100) {};
+		MyList() : lst(100) {};									// По умолчанию 100
 
-
-		auto begin()	{ return lst.begin();	}
+		/*
+		* Задаем итераторы
+		*/
+		auto begin()	{ return lst.begin();	}				
 		auto end()		{ return lst.end();		}
 		auto cbegin()	{ return lst.cbegin();	}
 		auto cend()		{ return lst.cend();	}
@@ -35,18 +37,23 @@ namespace LAB2 {
 		auto crend()	{ return lst.crend();	}
 
 
-		size_t  getSizeList() const { return lst.size(); }
+		size_t  getSizeList() const { return lst.size(); }	// Возвращает размер списка
 
 
 		void resize(size_t newSize)
 		{
-			lst.clear();
+			/*
+			*	Устанавливает новый размер списка
+			*/
 			lst.resize(newSize);
 		}
 
 
 		void clear()
 		{
+			/*
+			*	Очищает список
+			*/
 			size_t maxSize{ lst.size() };
 			lst.clear();
 			lst.resize(maxSize);
@@ -55,6 +62,9 @@ namespace LAB2 {
 
 		void createRandomList()
 		{
+			/*
+			*	Создает список со случайными значениями в диапазоне [0, max(type<int>)) <-(псевдокод)
+			*/
 			srand(static_cast<unsigned int>(time(0)));
 			std::for_each(lst.begin(), lst.end(), [](int& item) {
 				item = rand() % std::numeric_limits<int>::max();
@@ -64,6 +74,9 @@ namespace LAB2 {
 
 		void shuffle()
 		{
+			/*
+			*	Перемешивает список
+			*/
 			std::vector<Type> tmp(lst.size());
 			std::copy(lst.begin(), lst.end(), tmp.begin());
 			std::shuffle(tmp.begin(), tmp.end(), std::mt19937(std::random_device()()));
@@ -77,6 +90,12 @@ namespace LAB2 {
 			, TypePredicat typePredicat = TypePredicat::less
 		)
 		{
+			/*
+			*	Алгоритм сортировки
+			* begin -	итератор начала списка
+			* end	-	итератор конца списка
+			* typePredicat -	предикат, по умолчанию TypePredicat::less (по оператору "<" )
+			*/
 			std::function<bool(Type, Type)> predicat;
 			switch (typePredicat) {
 			case TypePredicat::less:
@@ -102,6 +121,7 @@ namespace LAB2 {
 			std::tie(array, counts) = mergeSort(begin, middle, end, predicat);
 
 			std::move(array.cbegin(), array.cend(), begin);
+
 			return countsCompareAndMove + counts;
 		}
 
@@ -114,6 +134,18 @@ namespace LAB2 {
 			, Comp predicat
 		) -> std::pair<std::vector<typename Iter::value_type>, size_t>
 		{
+			/// <summary>
+			/// Алгоритм слияния по итерируемых объектов в диапазоне [begin middle) и [middle, end)
+			/// </summary>
+			/// <typeparam name="Iter"> Тип итератора </typeparam>
+			/// <typeparam name="Comp"> Тип предиката </typeparam>
+			/// <param name="begin"> Итератор на начало списка </param>
+			/// <param name="middle"> Итератор на середину списка </param>
+			/// <param name="end"> Итератор на конец списка</param>
+			/// <param name="predicat"> предикат </param>
+			/// <returns>
+			/// пара из вектора и числа сравнений(и перемещений)
+			/// </returns>
 			std::vector<typename Iter::value_type> array;
 
 			Iter left{ begin }, right{ middle };
@@ -134,6 +166,13 @@ namespace LAB2 {
 		template <typename Iter>
 		Type sum(Iter begin, Iter end)
 		{
+			/// <summary>
+			/// Суммирует все элементы
+			/// </summary>
+			/// <typeparam name="Iter"></typeparam>
+			/// <param name="begin"></param>
+			/// <param name="end"></param>
+			/// <returns></returns>
 			return std::accumulate(begin, end, Type(), [](Type a, Type b) {
 				return a + b;
 				});

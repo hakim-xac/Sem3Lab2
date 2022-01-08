@@ -13,10 +13,17 @@ namespace LAB2 {
 	};
 
 	enum class SortingStatus {
-		SortedAscending, SortedDescending, ShuffleSorted, RandomSorted, NotStatus
+		SortedAscending								// "По возрастанию"
+		, SortedDescending							// "По убыванию"
+		, ShuffleSorted								// "Перемешан"
+		, RandomSorted								// "Случайно"
+		, NotStatus									// "Не сортирован"
 	};
 
-	enum class TypePredicat { less, greater };
+	enum class TypePredicat {
+		less										// Сравнивать операцией "<" 
+		, greater									// Сравнивать операцией ">" 
+	};
 }
 
 
